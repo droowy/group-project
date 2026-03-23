@@ -67,53 +67,119 @@ int main() {
     cout << "Your damage output is: " << damageOutput << endl;
     cout << "Your energy are: " << energy << endl;
 
-    cout << "You are now suited for your first adventure. Good luck " << user << "!" << endl;
-    string adventureChoice;
-    cout << "Do you want to go on an adventure? (Y/N) \n";
-    cin >> adventureChoice;
-    if (adventureChoice == "Y" || adventureChoice == "y") {
-        cout << "You have chosen to go on an adventure! \n";
-        cout << "You stumble upon a forest and decide to explore it. \n";
-        cout << "You encounter a wild monster! Do you want to fight or run? (fight/run) \n";
-        string fightChoice;
-        int monsterHealth = 25;
-        cin >> fightChoice;
+    // 开始第一关 (Level 1: Forest) 
+    cout << "\nYou are now suited for your first adventure. Good luck " << user << "!" << endl;
+    cout << "\n=== LEVEL 1: THE FOREST ===" << endl;
+    cout << "QUEST: Get a wolf's head" << endl;
 
-        if (fightChoice == "fight") {
-            cout << "You have chosen to fight the monster! \n";
-            cout << "You have defeated the monster and gained 50 coins! \n";
-            coins += 50;    // Gain bounty / 获得赏金
-            energy -=10;    // Combat costs energy/ 战斗消耗精力
-            cout << "Your coins are now: " << coins << endl;
-            cout << "Your energe are now: " << energy << endl;
-        } else if (fightChoice == "run") {
-            cout << "You have chosen to run away from the monster! \n";
-            cout << "You are able to flee with a minor scratch. \n";
-            health -= 5;
-            cout << "Your health is now: " << health << endl;
-        } else {
-            cout << "Invalid choice, please restart the program and choose a valid option. \n";
+    bool levelOneComplete = false;
+    int choice;
+
+    // The main loop for Level 1 / 第一关的主循环
+    // Continues until the quest is complete or the player dies / 只要任务没完成且玩家存活，就一直循环
+    while (!levelOneComplete && health > 0) {
+        cout << "\n--- Level 1 Menu ---" << endl;
+        cout << "1. Hunt (-5 Energy, +10 Coins)" << endl;
+        cout << "2. Explore (-5 Energy, +10 Health)" << endl;
+        cout << "3. Fight (Duel with a wolf)" << endl;
+        cout << "4. View Inventory and Stats" << endl;
+        cout << "Enter your choice (1-4): ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: // Hunt / 打猎
+                if (energy >= 5) {
+                    cout << "\nYou hunt and kill a bird! \n";
+                    coins += 10;
+                    energy -= 5;
+                    cout << "Result: +10 Coins, -5 Energy. \n";
+                } else {
+                    cout << "\nYou are too tired to hunt! You need at least 5 energy. \n";
+                }
+                break;
+
+            case 2: // Explore / 探索
+                if (energy >= 5) {
+                    cout << "\nYou go fishing! \n";
+                    health += 10;
+                    energy -= 5;
+                    cout << "Result: +10 Health, -5 Energy. \n";
+                } else {
+                    cout << "\nYou are too tired to explore! You need at least 5 energy. \n";
+                }
+                break;
+
+            case 3: { // Fight the Wolf / 打狼
+                cout << "\nYou engage in a duel with a wolf! \n";
+                int wolfHealth = 60;
+                
+                
+                // fight loop
+                while (wolfHealth > 0 && health > 0) {
+                    
+                    cout << "\nWolf Health: " << wolfHealth << endl;
+                    cout << "Your Health: " << health << " | Your Energy: " << energy << endl;
+                    cout << "1. Light attack (-10 energy, deals 15 dmg to wolf HP)" << endl;
+                    cout << "2. Strong attack (-20 energy, deals 40 dmg to wolf HP)" << endl;
+                    
+                    int attackChoice;
+                    cin >> attackChoice;
+
+                    if (attackChoice == 1) {
+                        if (energy >= 10) { 
+                            energy -= 10;
+                            wolfHealth -= 15; 
+                            cout << "You used a Light Attack!" << endl;
+                        } else {
+                            cout << "Not enough energy!" << endl;
+                        }
+                    } else if (attackChoice == 2) {
+                         if (energy >= 20) {
+                            energy -= 20;
+                            wolfHealth -= 40;
+                            cout << "You used a Strong Attack!" << endl;
+                        } else {
+                            cout << "Not enough energy!" << endl;
+                        }
+                    } else {
+                        cout << "Invalid attack choice." << endl;
+                    }
+                }
+
+                // 判断战斗结果
+                if (wolfHealth <= 0) {
+                    cout << "\nYou have won the duel!" << endl;
+                    energy += 100; 
+                    cout << "You gained +100 Energy." << endl;
+                    cout << "Take the wolf's head" << endl;
+                    cout << "\nQuest Completed! You got the wolf's head." << endl;
+                    levelOneComplete = true; // finsih tesk完成任务，跳出第一关大循环
+                } // end if 结束 if
+
+                break; 
+            } // End Fight Case
+
+            case 4: // View Stats / 查看属性
+                cout << "\n--- STATS ---" << endl;
+                cout << "Health: " << health << endl;
+                cout << "Energy: " << energy << endl;
+                cout << "Coins: " << coins << endl;
+                cout << "Damage: " << damageOutput << endl;
+                break;
+
+            default:
+                cout << "Invalid choice. Please pick 1-4." << endl;
+                break;
         }
-    } else if (adventureChoice == "N" || adventureChoice == "n") {
-        cout << "You have chosen not to go on an adventure. Maybe next time! \n";
-    } else {
-        cout << "Invalid choice, please restart the program and choose a valid option. \n";
     }
 
-    cout << "Would you like to view inventory and stats? (Y/N) \n";
-    string inventoryChoice;
-    cin >> inventoryChoice;
-    if (inventoryChoice == "Y" || inventoryChoice == "y") {
-        cout << "You have chosen to view your inventory! \n";
-        cout << "Health: " << health << endl;
-        cout << "Coins: " << coins << endl;
-        cout << "Damage: " << damageOutput << endl;
-        cout << "energy: " << energy << endl;
-    } else if (inventoryChoice == "N" || inventoryChoice == "n") {
-        cout << "You have chosen not to view your inventory. Maybe next time! \n";
-    } else {
-        cout << "Invalid choice, please restart the program and choose a valid option. \n";
+    // end 关卡结束判定
+    if (health <= 0) {
+        cout << "\nYou have died. GAME OVER." << endl;
+    } else if (levelOneComplete) {
+        cout << "\nCongratulations " << user << "! You are moving on to Level 2: The Village!" << endl;
+        // add next level code后续可以在这里加上进入第二关的代码
     }
-    
-    
+
+    return 0;
 }
