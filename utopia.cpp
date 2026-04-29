@@ -223,6 +223,5 @@ void displayEndGame(string user, int health, bool levelOneComplete) {
         cout << "\nYou have died. GAME OVER." << endl;
     } else if (levelOneComplete) {
         cout << "\nCongratulations " << user << "! You are moving on to Level 2: The Village!" << endl;
-        // Add next level code here / 后续可以在这里加上进入第二关的代码
     }
 }
