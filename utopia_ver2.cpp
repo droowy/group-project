@@ -3,7 +3,7 @@
 //  CS 002 Honors Project
 // ============================================================
 /* changes:
-- when the player consumes an item that increases health, limit to the max
+- when the player consumes an item that increases health, limit to the max **need to do
 - comsumables are automatically used, only weapons are stored in the inventory
         **inventory is only for the user to know what weapon is being used
         can use one weapon at a time, cannot store > 1
